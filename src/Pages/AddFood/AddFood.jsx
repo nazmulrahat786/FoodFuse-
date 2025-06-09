@@ -13,7 +13,7 @@ const AddFood = () => {
   const { user } = useContext(AuthContext);
   const axiosInstance = useAxiosInstance();
 
-  const { isPending, mutateAsync } = useMutation({
+  const { isLoading, mutateAsync } = useMutation({
     mutationFn: async (foodData) => {
       await axiosInstance.post("/all-foods", foodData);
     },
@@ -29,13 +29,15 @@ const AddFood = () => {
   // handle Add Food Function
   const handleAddFood = async (e) => {
     e.preventDefault();
-    const foodName = e.target.foodName.value;
-    const foodImg = e.target.photo.value;
-    const foodQuantity = parseInt(e.target.foodQuantity.value);
-    const location = e.target.pickupLocation.value;
+    const form = e.target;
+
+    const foodName = form.foodName.value;
+    const foodImg = form.photo.value;
+    const foodQuantity = parseInt(form.foodQuantity.value);
+    const location = form.pickupLocation.value;
     const expireDate = format(new Date(startDate), "P");
-    const status = e.target.status.value;
-    const additionalNotes = e.target.additionalNotes.value;
+    const status = form.status.value;
+    const additionalNotes = form.additionalNotes.value;
 
     // Add Food Data
     const addFoodData = {
@@ -52,10 +54,15 @@ const AddFood = () => {
         donatorEmail: user?.email,
       },
     };
+
     await mutateAsync(addFoodData);
+
+    // Reset form and date picker after success
+    form.reset();
+    setStartDate(new Date());
   };
 
-  if (isPending) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
         <FadeLoader color="#ff3131" loading={true} />
@@ -119,9 +126,10 @@ const AddFood = () => {
                   Food Quantity
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   name="foodQuantity"
                   placeholder="Enter quantity"
+                  min="1"
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
                   required
                 />
