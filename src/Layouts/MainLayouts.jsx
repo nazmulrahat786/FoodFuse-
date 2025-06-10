@@ -6,6 +6,7 @@ const MainLayouts = () => {
   return (
     <div className="flex flex-col min-h-screen justify-between"> 
       <div className="px-4  lg:px-12 bg-orange-50">
+        
         <Navbar />
       </div>
       <div>

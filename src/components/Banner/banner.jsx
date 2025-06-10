@@ -24,9 +24,13 @@
 // };
 
 // export default Banner;
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
+
 
 const Banner = () => {
+    const { user } = useContext(AuthContext);
   const imageUrl =
     "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=1600&q=80";
 
@@ -49,12 +53,25 @@ const Banner = () => {
         <p className="text-lg md:text-xl mb-6 max-w-2xl text-white/90">
           Share surplus food, fight hunger, and connect with your community through FoodFuse.
         </p>
-        <Link
-          to="/login"
-          className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300"
-        >
-          Join Now
-        </Link>
+
+        {
+          user ? (
+            <Link
+              to="/addFood"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300"
+            >
+              Join Now
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300"
+            >
+              Join Now
+            </Link>
+          )
+        }
+      
       </div>
     </div>
   );
