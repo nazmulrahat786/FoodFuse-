@@ -24,19 +24,19 @@ const FeaturedFoods = () => {
     );
   }
 
-  // Sort by foodQuantity descending, then take top 6
+  // Show top 8 foods sorted by quantity descending
   const foodsToShow =
     data
-      ?.slice() // create a copy so original data isn't mutated
+      ?.slice()
       .sort((a, b) => (b.foodQuantity || 0) - (a.foodQuantity || 0))
-      .slice(0, 6) || [];
+      .slice(0, 8) || [];
 
   return (
     <div className="xl:container mx-auto pt-16 pb-14">
       <h2 className="text-2xl font-semibold text-center text-orange-600 border-2 border-orange-600 rounded-xl p-2 w-[90%] mx-auto">
         Featured Foods
       </h2>
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {foodsToShow.length > 0 ? (
           foodsToShow.map((food) => (
             <div

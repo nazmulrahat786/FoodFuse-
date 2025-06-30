@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "foodfuse-1b815"
-  }
+    "dist": "fbfsf-a4a9f"
+  },
+  "targets": {},
+  "etags": {}
 }

@@ -1,19 +1,66 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import ThreeGridCol from "../../assets/Images/3gridcolumns.png";
-import TwoGridCol from "../../assets/Images/2gridcolumns.png";
-import { FadeLoader } from "react-spinners"; // Add this
+import { FadeLoader } from "react-spinners";
+
+// Heroicons SVG for grid layouts (imported inline)
+const FourGridIcon = (props) => (
+  <svg
+    {...props}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="3" y="3" width="7" height="7" />
+    <rect x="14" y="3" width="7" height="7" />
+    <rect x="14" y="14" width="7" height="7" />
+    <rect x="3" y="14" width="7" height="7" />
+  </svg>
+);
+
+const ThreeGridIcon = (props) => (
+  <svg
+    {...props}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="3" y="3" width="7" height="18" />
+    <rect x="14" y="3" width="7" height="7" />
+    <rect x="14" y="14" width="7" height="7" />
+  </svg>
+);
+
+const TwoGridIcon = (props) => (
+  <svg
+    {...props}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    viewBox="0 0 24 24"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="3" y="3" width="7" height="18" />
+    <rect x="14" y="3" width="7" height="18" />
+  </svg>
+);
 
 const AvailableFoods = () => {
   const [foods, setFoods] = useState([]);
-  const [layout, setLayout] = useState(3);
+  const [layout, setLayout] = useState(4); // default 4 columns
   const [sort, setSort] = useState("");
   const [search, setSearch] = useState("");
-  const [isSearching, setIsSearching] = useState(false); // loading state
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    setIsSearching(true); // start loading
+    setIsSearching(true);
     axios
       .get(
         `${import.meta.env.VITE_BASE_URL}/all-foods?available=true&sort=${sort}&search=${search}`
@@ -24,11 +71,11 @@ const AvailableFoods = () => {
         } else {
           setFoods([]);
         }
-        setIsSearching(false); // stop loading
+        setIsSearching(false);
       })
       .catch(() => {
         setFoods([]);
-        setIsSearching(false); // stop loading on error too
+        setIsSearching(false);
       });
   }, [sort, search]);
 
@@ -72,20 +119,25 @@ const AvailableFoods = () => {
               <option value="dsc">Descending Order</option>
             </select>
 
-            <div className="flex items-center gap-2 cursor-pointer">
-              <img
-                src={ThreeGridCol}
-                alt="Three Column Layout"
-                className={`w-10 h-10 rounded ${
-                  layout === 3 ? "opacity-100" : "opacity-50"
+            <div className="flex items-center gap-4 cursor-pointer">
+              {/* 4 Columns */}
+              <FourGridIcon
+                className={`w-8 h-8 rounded p-1 ${
+                  layout === 4 ? "text-orange-600 bg-orange-100" : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
+                }`}
+                onClick={() => setLayout(4)}
+              />
+              {/* 3 Columns */}
+              <ThreeGridIcon
+                className={`w-8 h-8 rounded p-1 ${
+                  layout === 3 ? "text-orange-600 bg-orange-100" : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
                 }`}
                 onClick={() => setLayout(3)}
               />
-              <img
-                src={TwoGridCol}
-                alt="Two Column Layout"
-                className={`w-8 h-8 rounded ${
-                  layout === 2 ? "opacity-100" : "opacity-50"
+              {/* 2 Columns */}
+              <TwoGridIcon
+                className={`w-8 h-8 rounded p-1 ${
+                  layout === 2 ? "text-orange-600 bg-orange-100" : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
                 }`}
                 onClick={() => setLayout(2)}
               />
@@ -101,7 +153,11 @@ const AvailableFoods = () => {
         ) : (
           <div
             className={`grid sm:grid-cols-1 ${
-              layout === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"
+              layout === 4
+                ? "lg:grid-cols-4"
+                : layout === 3
+                ? "lg:grid-cols-3"
+                : "lg:grid-cols-2"
             } gap-6`}
           >
             {foods.length > 0 ? (
@@ -109,45 +165,22 @@ const AvailableFoods = () => {
                 <div
                   key={food._id}
                   className="rounded-lg shadow-lg p-6 flex flex-col hover:shadow-2xl transition-shadow duration-300 bg-white"
+                  style={{ minHeight: "460px" }} // fixed height for equal size cards
                 >
                   <img
                     src={food?.foodImg}
                     alt={food?.foodName || "food image"}
-                    className="w-full h-64 object-cover rounded-md mb-5 hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 object-cover rounded-md mb-4 hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="mb-4 flex justify-between items-center">
-                    <h2 className="text-xl font-bold text-gray-800">
-                      {food?.foodName}
-                    </h2>
-                    <p
-                      className={`px-4 py-1 text-sm font-semibold rounded-full ${
-                        food?.status === "Available"
-                          ? "bg-green-100 text-green-700"
-                          : food?.status === "Expired"
-                          ? "bg-red-100 text-red-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {food?.status}
-                    </p>
-                  </div>
-                  <div className="flex flex-col lg:flex-row justify-between items-center mb-6 gap-3 text-gray-700">
-                    <p>
-                      <span className="font-semibold">Quantity:</span>{" "}
-                      {food?.foodQuantity}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Expires on:</span>{" "}
-                      {new Date(food?.expireDate).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </p>
-                  </div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-2">
+                    {food?.foodName}
+                  </h2>
+                  <p className="text-gray-600 flex-grow mb-4 line-clamp-3">
+                    {food?.shortDescription || "No description available for this food item."}
+                  </p>
                   <Link to={`/food/${food?._id}`}>
                     <button className="w-full bg-orange-500 text-white py-3 rounded-lg shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-300 font-semibold">
-                      View Details
+                      See More
                     </button>
                   </Link>
                 </div>

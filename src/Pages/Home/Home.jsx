@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import Banner from "../../components/Banner/banner";
 import FeaturedFoods from "../../components/FeaturedFoods/FeaturedFoods";
 
-import OurApp from "../../components/OurApp/OurApp";
+
 import About from "../../components/About/About";
+import ReviewSection from "../../components/ReviewSection/ReviewSection";
+import UpcomingEvents from "../../components/UpcomingEvents/UpcomingEvents";
 
 const Home = () => {
   return (
-    <div>
+    <div className=" ">
       <Banner />
       <div className="w-[90%] mx-auto ">
         <FeaturedFoods />
@@ -19,10 +21,14 @@ const Home = () => {
           </button>
         </Link>
       </div>
+      <div>
+        <UpcomingEvents></UpcomingEvents>
+      </div>
     
       
-      <div className="">
-        <OurApp />
+
+      <div>
+        <ReviewSection></ReviewSection>
       </div>
       <div>
         <About></About>

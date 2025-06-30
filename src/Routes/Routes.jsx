@@ -11,6 +11,7 @@ import ManageMyFoods from "../Pages/ManageMyFoods/ManageMyFoods";
 import MyFoodRequest from "../Pages/MyFoodRequest/MyFoodRequest";
 import DetailsPage from "../Pages/DetailsPage/DetailsPage";
 import UpdateMyFoods from "../Pages/UpdateMyFoods/UpdateMyFoods";
+import AllFoods from "../Pages/AllFoods/AllFoods";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <AddFood />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "/allFoods",
+        element: (
+          <PrivateRoutes>
+            <AllFoods></AllFoods>
           </PrivateRoutes>
         ),
       },

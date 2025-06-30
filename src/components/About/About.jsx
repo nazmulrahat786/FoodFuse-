@@ -2,15 +2,15 @@ const About = () => {
   return (
     <section
       aria-labelledby="about-heading"
-      className="bg-orange-50 my-10 py-20 px-6"
+      className=" my-10 py-20 px-6"
     >
       <div className="xl:container mx-auto max-w-7xl grid md:grid-cols-2 gap-12 items-center">
         {/* Image section */}
         <div>
           <img
             src="https://i.pinimg.com/736x/73/ec/70/73ec706c100a7ebeb7decf1c506d984c.jpg"
-            alt="Volunteers distributing donated food"
-            className="rounded-2xl shadow-lg w-full object-cover h-[420px]"
+            alt="Volunteers distributing donated food to community members"
+            className="rounded-2xl shadow-lg w-full object-cover h-[420px] max-h-[420px]"
             loading="lazy"
           />
         </div>
@@ -21,7 +21,7 @@ const About = () => {
             id="about-heading"
             className="text-4xl font-extrabold text-orange-600 mb-6"
           >
-            <samp className="text-balance">About </samp>
+            <span className="text-balance">About </span>
             FoodFuse
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed mb-4">
@@ -44,8 +44,10 @@ const About = () => {
                   className="w-6 h-6"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth={2}
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
                 >
                   <path
                     strokeLinecap="round"
@@ -69,8 +71,10 @@ const About = () => {
                   className="w-6 h-6"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth={2}
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
                 >
                   <path
                     strokeLinecap="round"
@@ -94,8 +98,10 @@ const About = () => {
                   className="w-6 h-6"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth={2}
                   viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  focusable="false"
                 >
                   <path
                     strokeLinecap="round"

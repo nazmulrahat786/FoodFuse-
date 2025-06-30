@@ -10,26 +10,28 @@ const axiosInstance = axios.create({
 });
 
 const useAxiosInstance = () => {
-  const { logOut, user } = useContext(AuthContext); // Get current user (to extract token)
+  const { logOut, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Request interceptor to add token if available
+    // Request interceptor: add Firebase token if available
     const reqInterceptor = axiosInstance.interceptors.request.use(
       async (config) => {
-        const token = await user?.getIdToken?.(); // Firebase method
-        if (token) {
-          config.headers = config.headers || {};
-          config.headers.Authorization = `Bearer ${token}`;
+        if (user?.getIdToken) {
+          const token = await user.getIdToken();
+          if (token) {
+            config.headers = config.headers ?? {};
+            config.headers.Authorization = `Bearer ${token}`;
+          }
         }
         return config;
       },
       (error) => Promise.reject(error)
     );
 
-    // Response interceptor for 401/403 errors
+    // Response interceptor: logout and redirect on 401/403
     const resInterceptor = axiosInstance.interceptors.response.use(
-      (res) => res,
+      (response) => response,
       (error) => {
         const status = error?.response?.status;
         if (status === 401 || status === 403) {
@@ -39,6 +41,7 @@ const useAxiosInstance = () => {
       }
     );
 
+    // Cleanup interceptors when component unmounts or deps change
     return () => {
       axiosInstance.interceptors.request.eject(reqInterceptor);
       axiosInstance.interceptors.response.eject(resInterceptor);

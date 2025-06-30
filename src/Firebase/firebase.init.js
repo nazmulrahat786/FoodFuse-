@@ -3,15 +3,15 @@ import { initializeApp } from "firebase/app";
 
 
 import { getAuth } from "firebase/auth";
-
 const firebaseConfig = {
- apiKey: "AIzaSyCkkth-Mc0zbCpKrQk5DL-rGzkb0qoSCz4",
-  authDomain: "foodfuse-1b815.firebaseapp.com",
-  projectId: "foodfuse-1b815",
-  storageBucket: "foodfuse-1b815.firebasestorage.app",
-  messagingSenderId: "489098807701",
-  appId: "1:489098807701:web:2830d684fdd3c250930e9c",
-  measurementId: "G-LKTF3HQ2ZY"
+ apiKey: "AIzaSyBiffTWeL366gp-byro87vThWyg1PCNKO8",
+  authDomain: "fbfsf-a4a9f.firebaseapp.com",
+  databaseURL: "https://fbfsf-a4a9f-default-rtdb.firebaseio.com",
+  projectId: "fbfsf-a4a9f",
+  storageBucket: "fbfsf-a4a9f.firebasestorage.app",
+  messagingSenderId: "829280606347",
+  appId: "1:829280606347:web:07126bdeafe0c073b3dc8e",
+  measurementId: "G-P32T5PTGTF"
 };
 
 const app = initializeApp(firebaseConfig);

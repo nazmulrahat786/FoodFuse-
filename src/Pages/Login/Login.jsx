@@ -3,12 +3,14 @@ import toast from "react-hot-toast";
 import { FaEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeSharp } from "react-icons/io5";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import Lottie from "lottie-react";
 import loginAnimation from "../../assets/login.json";
 
 const Login = () => {
+  const location = useLocation();
+ 
   const [signToggle, setSignToggle] = useState(false);
   const navigate = useNavigate();
   const { loginWithEmail, loginInWithGoogle, user } = useContext(AuthContext);
@@ -25,7 +27,7 @@ const Login = () => {
     loginWithEmail(email, password)
       .then(() => {
         toast.success("Login successfully");
-        navigate("/");
+       navigate(`${location.state ? location.state : "/"}`);
       })
       .catch((error) => {
         // Handle Firebase-style error codes
@@ -49,7 +51,7 @@ const Login = () => {
     loginInWithGoogle()
       .then(() => {
         toast.success("Google Login successfully");
-        navigate("/");
+        navigate(`${location.state ? location.state : "/"}`);
       })
       .catch(() => {
         toast.error("Google Login failed. Please try again.");

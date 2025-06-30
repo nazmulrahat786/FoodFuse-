@@ -17,46 +17,47 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState(null);
-  const [refetch, setRefetch] = useState();
+  const [email, setEmail] = useState(null); // kept as requested
+
   const googleProvider = new GoogleAuthProvider();
 
-  // Google Login
+  // Google Login (name unchanged)
   const loginInWithGoogle = () => {
+    setLoading(true);
     return signInWithPopup(auth, googleProvider)
       .then(async (result) => {
         const user = result.user;
         if (user) {
-          // Ensure user profile gets updated
           await updateProfile(user, {
             displayName: user.displayName || "User",
             photoURL: user.photoURL || "https://via.placeholder.com/40",
           });
-
-          // Set user state properly
-          setUser({
-            ...user,
-            displayName: user.displayName,
-            photoURL: user.photoURL || "https://via.placeholder.com/40",
-          });
+          setUser(user); // update user here for immediate UI update
         }
       })
       .catch((error) => {
         console.error("Google Sign-in Error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
-  // Register with Email
+  // Register with email
   const registerWithEmail = (email, password) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password)
+      .finally(() => setLoading(false));
   };
 
-  // Login With Email and Password
+  // Login with email
   const loginWithEmail = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password)
+      .finally(() => setLoading(false));
   };
 
-  // Update Profile
+  // Update profile
   const updateUserProfile = (profile) => {
     return updateProfile(auth.currentUser, profile).then(() => {
       setUser({ ...auth.currentUser, ...profile });
@@ -65,14 +66,13 @@ const AuthProvider = ({ children }) => {
 
   // Logout
   const logOut = () => {
-    return signOut(auth).then(() => {
-      setUser(null);
-    });
+    setLoading(true);
+    return signOut(auth).finally(() => setLoading(false));
   };
 
-  // UseEffect to Track Auth Changes
+  // Track auth state - runs once on mount
   useEffect(() => {
-    const connection = onAuthStateChanged(auth, (currentUser) => {
+    const connection = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser({
           ...currentUser,
@@ -80,36 +80,42 @@ const AuthProvider = ({ children }) => {
         });
 
         const users = { email: currentUser.email };
-        axios
-          .post(`${import.meta.env.VITE_BASE_URL}/jwt`, users, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            console.log(res.data);
-            setLoading(false);
-          });
+
+        try {
+          const res = await axios.post(
+            `${import.meta.env.VITE_BASE_URL}/jwt`,
+            users,
+            { withCredentials: true }
+          );
+          if (import.meta.env.DEV) console.log("JWT response:", res.data);
+        } catch (err) {
+          console.error("JWT error:", err);
+        } finally {
+          setLoading(false);
+        }
       } else {
         setUser(null);
-        axios
-          .post(
+
+        try {
+          const res = await axios.post(
             `${import.meta.env.VITE_BASE_URL}/logout`,
             {},
             { withCredentials: true }
-          )
-          .then((res) => {
-            console.log(res.data);
-            setLoading(false);
-          });
+          );
+          if (import.meta.env.DEV) console.log("Logout response:", res.data);
+        } catch (err) {
+          console.error("Logout error:", err);
+        } finally {
+          setLoading(false);
+        }
       }
     });
 
-    return () => connection();
-  }, [refetch]);
+    return connection; // cleanup
+  }, []);
 
-  // Auth Info
   const authInfo = {
     user,
-    setRefetch,
     loading,
     setLoading,
     email,
@@ -122,7 +128,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
