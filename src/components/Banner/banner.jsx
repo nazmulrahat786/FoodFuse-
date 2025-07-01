@@ -9,7 +9,7 @@ const Banner = () => {
 
   return (
     <div
-      className="relative overflow-hidden"
+      className="relative  overflow-hidden"
       style={{ height: "65vh" }} // ভিউপোর্টের ৬৫% উচ্চতা
     >
       {/* Background Image */}

@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { Link } from "react-router-dom"; // ✅ Import Link for routing
 
 const PAGE_SIZE = 8;
 
@@ -7,15 +8,13 @@ const AllFoods = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filters and pagination
-  const [filter, setFilter] = useState("all"); // all | available | requested
+  const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const API_URL =
     import.meta.env.VITE_BASE_URL || "https://food-server-chi.vercel.app";
 
-  // Extract timestamp from Mongo ObjectId
   const getTimestampFromObjectId = (id) =>
     parseInt(id.substring(0, 8), 16) * 1000;
 
@@ -25,13 +24,10 @@ const AllFoods = () => {
         const res = await fetch(`${API_URL}/all-foods`);
         if (!res.ok) throw new Error("Failed to fetch food items");
         const data = await res.json();
-
-        // Sort newest first
         const sorted = data.sort(
           (a, b) =>
             getTimestampFromObjectId(b._id) - getTimestampFromObjectId(a._id)
         );
-
         setFoods(sorted);
       } catch (err) {
         setError(err.message);
@@ -42,16 +38,13 @@ const AllFoods = () => {
     fetchFoods();
   }, [API_URL]);
 
-  // Filtered and searched list (memoized for performance)
   const filteredFoods = useMemo(() => {
     let filtered = foods;
-
     if (filter !== "all") {
       filtered = filtered.filter(
         (f) => f.status.toLowerCase() === filter.toLowerCase()
       );
     }
-
     if (searchTerm.trim() !== "") {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(
@@ -61,40 +54,56 @@ const AllFoods = () => {
           (f.donator?.donatorName?.toLowerCase().includes(term) ?? false)
       );
     }
-
     return filtered;
   }, [foods, filter, searchTerm]);
 
-  // Pagination calculation
   const pageCount = Math.ceil(filteredFoods.length / PAGE_SIZE);
   const currentFoods = filteredFoods.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
   );
 
-  // Reset page when filters/search change
   useEffect(() => {
     setCurrentPage(1);
   }, [filter, searchTerm]);
 
-  if (loading) {
-    return (
-      <div className="max-w-7xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold mb-6 text-center text-orange-600">
-          Loading food items...
-        </h1>
-        {/* Skeleton loader */}
-        <div role="status" className="animate-pulse space-y-4">
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="h-12 bg-orange-200 rounded-md max-w-full mx-auto"
-            />
-          ))}
-        </div>
+if (loading) {
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-10">
+      <h1 className="text-3xl font-bold mb-6 text-center text-orange-600">
+        All Food Items
+      </h1>
+      <div className="overflow-x-auto border border-gray-200 rounded-md shadow-sm">
+        <table className="min-w-full table-auto divide-y divide-gray-200">
+          <thead className="bg-orange-100 text-left text-sm font-semibold text-gray-700">
+            <tr>
+              <th className="px-4 py-3">Image</th>
+              <th className="px-4 py-3">Name</th>
+              <th className="px-4 py-3 text-center">Qty</th>
+              <th className="px-4 py-3">Expire Date</th>
+              <th className="px-4 py-3">Location</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Donator</th>
+              <th className="px-4 py-3 text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {[...Array(8)].map((_, i) => (
+              <tr key={i} className="animate-pulse">
+                {[...Array(8)].map((__, j) => (
+                  <td key={j} className="px-4 py-4">
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   if (error)
     return (
@@ -109,9 +118,8 @@ const AllFoods = () => {
         All Food Items
       </h1>
 
-      {/* Controls: filter buttons + search */}
+      {/* Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-        {/* Filter Buttons */}
         <div className="flex space-x-3">
           {["all", "available", "requested"].map((f) => (
             <button
@@ -139,7 +147,6 @@ const AllFoods = () => {
           )}
         </div>
 
-        {/* Search box */}
         <div className="relative w-full sm:w-64">
           <input
             type="search"
@@ -168,7 +175,6 @@ const AllFoods = () => {
         </p>
       ) : (
         <>
-          {/* Responsive Table */}
           <div className="overflow-x-auto rounded-md border border-gray-300 shadow-sm">
             <table className="min-w-full table-auto divide-y divide-gray-200">
               <thead className="bg-orange-100 text-left text-sm font-semibold text-gray-700">
@@ -182,6 +188,9 @@ const AllFoods = () => {
                   <th className="px-4 py-3 whitespace-nowrap">Location</th>
                   <th className="px-4 py-3 whitespace-nowrap">Status</th>
                   <th className="px-4 py-3 whitespace-nowrap">Donator</th>
+                  <th className="px-4 py-3 whitespace-nowrap text-center">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200 text-gray-800 text-sm">
@@ -218,7 +227,6 @@ const AllFoods = () => {
                             : "bg-red-100 text-red-800"
                         }`}
                       >
-                        {/* Status icon */}
                         {food.status.toLowerCase() === "available" ? (
                           <svg
                             className="w-4 h-4 mr-1"
@@ -226,8 +234,6 @@ const AllFoods = () => {
                             stroke="currentColor"
                             strokeWidth="2"
                             viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
                           >
                             <path
                               strokeLinecap="round"
@@ -242,8 +248,6 @@ const AllFoods = () => {
                             stroke="currentColor"
                             strokeWidth="2"
                             viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            aria-hidden="true"
                           >
                             <path
                               strokeLinecap="round"
@@ -272,13 +276,20 @@ const AllFoods = () => {
                         <span className="text-gray-500 italic">Anonymous</span>
                       )}
                     </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-center">
+                      <Link
+                        to={`/food/${food?._id}`}
+                        className="text-sm px-3 py-1 rounded-md bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-150"
+                      >
+                        View Details
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          {/* Pagination Controls */}
           {pageCount > 1 && (
             <nav
               className="mt-6 flex justify-center space-x-2"

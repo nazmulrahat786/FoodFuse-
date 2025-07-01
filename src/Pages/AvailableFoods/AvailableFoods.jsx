@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FadeLoader } from "react-spinners";
 
 // Heroicons SVG for grid layouts (imported inline)
 const FourGridIcon = (props) => (
@@ -123,21 +122,27 @@ const AvailableFoods = () => {
               {/* 4 Columns */}
               <FourGridIcon
                 className={`w-8 h-8 rounded p-1 ${
-                  layout === 4 ? "text-orange-600 bg-orange-100" : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
+                  layout === 4
+                    ? "text-orange-600 bg-orange-100"
+                    : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
                 }`}
                 onClick={() => setLayout(4)}
               />
               {/* 3 Columns */}
               <ThreeGridIcon
                 className={`w-8 h-8 rounded p-1 ${
-                  layout === 3 ? "text-orange-600 bg-orange-100" : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
+                  layout === 3
+                    ? "text-orange-600 bg-orange-100"
+                    : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
                 }`}
                 onClick={() => setLayout(3)}
               />
               {/* 2 Columns */}
               <TwoGridIcon
                 className={`w-8 h-8 rounded p-1 ${
-                  layout === 2 ? "text-orange-600 bg-orange-100" : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
+                  layout === 2
+                    ? "text-orange-600 bg-orange-100"
+                    : "text-gray-400 hover:text-orange-600 hover:bg-orange-100"
                 }`}
                 onClick={() => setLayout(2)}
               />
@@ -145,10 +150,30 @@ const AvailableFoods = () => {
           </div>
         </div>
 
-        {/* Loading Spinner */}
+        {/* Loading Skeleton UI */}
         {isSearching ? (
-          <div className="flex justify-center items-center h-40">
-            <FadeLoader color="#f97316" />
+          <div
+            className={`grid sm:grid-cols-1 ${
+              layout === 4
+                ? "lg:grid-cols-4"
+                : layout === 3
+                ? "lg:grid-cols-3"
+                : "lg:grid-cols-2"
+            } gap-6`}
+          >
+            {[...Array(8)].map((_, index) => (
+              <div
+                key={index}
+                className="rounded-lg shadow-md p-6 flex flex-col bg-white animate-pulse"
+                style={{ minHeight: "460px" }}
+              >
+                <div className="w-full h-48 bg-gray-200 rounded mb-4"></div>
+                <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+                <div className="h-12 bg-gray-300 rounded w-full mt-auto"></div>
+              </div>
+            ))}
           </div>
         ) : (
           <div
@@ -176,7 +201,8 @@ const AvailableFoods = () => {
                     {food?.foodName}
                   </h2>
                   <p className="text-gray-600 flex-grow mb-4 line-clamp-3">
-                    {food?.shortDescription || "No description available for this food item."}
+                    {food?.shortDescription ||
+                      "No description available for this food item."}
                   </p>
                   <Link to={`/food/${food?._id}`}>
                     <button className="w-full bg-orange-500 text-white py-3 rounded-lg shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-300 font-semibold">

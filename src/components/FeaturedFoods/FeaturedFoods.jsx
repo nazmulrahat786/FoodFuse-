@@ -16,13 +16,37 @@ const FeaturedFoods = () => {
     queryFn: fetchFeaturedFoods,
   });
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <FadeLoader color="#ff3131" loading={true} />
+if (isLoading) {
+  return (
+    <div className="xl:container mx-auto pt-16 pb-14">
+      <h2 className="text-2xl font-semibold text-center text-orange-600 border-2 border-orange-600 rounded-xl p-2 w-[90%] mx-auto">
+        Featured Foods
+      </h2>
+
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[...Array(8)].map((_, i) => (
+          <div
+            key={i}
+            className="rounded shadow-md p-4 flex flex-col animate-pulse bg-white"
+          >
+            <div className="w-full h-60 bg-gray-200 rounded mb-4"></div>
+
+            <div className="h-5 bg-gray-300 rounded w-3/4 mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+
+            <div className="flex flex-col lg:flex-row justify-between gap-2 mb-4">
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+            </div>
+
+            <div className="h-10 bg-gray-300 rounded w-full"></div>
+          </div>
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
+}
+
 
   // Show top 8 foods sorted by quantity descending
   const foodsToShow =
