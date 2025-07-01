@@ -10,34 +10,7 @@ const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const location = useLocation();
 
-  const navLinkClass = ({ isActive }) =>
-    isActive
-      ? "text-orange-600 font-bold border-b-2 border-orange-600"
-      : "hover:text-orange-600 transition";
-
-  const links = (
-    <>
-      <NavLink to="/" className={navLinkClass}>
-        Home
-      </NavLink>
-      <NavLink to="/allFoods" className={navLinkClass}>
-        All Foods
-      </NavLink>
-      <NavLink to="/availableFoods" className={navLinkClass}>
-        Available Foods
-      </NavLink>
-      <NavLink to="/addFood" className={navLinkClass}>
-        Add Food
-      </NavLink>
-      <NavLink to="/manageMyFoods" className={navLinkClass}>
-        Manage My Foods
-      </NavLink>
-      <NavLink to="/myFoodRequest" className={navLinkClass}>
-        My Food Request
-      </NavLink>
-    </>
-  );
-
+  // Title update based on route
   useEffect(() => {
     const path = location.pathname;
     const titleMap = {
@@ -60,6 +33,40 @@ const Navbar = () => {
     }
   }, [location]);
 
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? "text-orange-600 font-bold border-b-2 border-orange-600"
+      : "hover:text-orange-600 transition";
+
+  // Authenticated & public links
+  const links = (
+    <>
+      <NavLink to="/" className={navLinkClass}>
+        Home
+      </NavLink>
+      <NavLink to="/allFoods" className={navLinkClass}>
+        All Foods
+      </NavLink>
+      <NavLink to="/availableFoods" className={navLinkClass}>
+        Available Foods
+      </NavLink>
+
+      {user && (
+        <>
+          <NavLink to="/addFood" className={navLinkClass}>
+            Add Food
+          </NavLink>
+          <NavLink to="/manageMyFoods" className={navLinkClass}>
+            Manage My Foods
+          </NavLink>
+          <NavLink to="/myFoodRequest" className={navLinkClass}>
+            My Food Request
+          </NavLink>
+        </>
+      )}
+    </>
+  );
+
   const handleLogOut = () => {
     logOut().then(() => toast.success("Logged out successfully"));
   };
@@ -68,7 +75,7 @@ const Navbar = () => {
     <div className="bg-orange-50 shadow-md fixed top-0 left-0 right-0 z-50">
       <header className="text-black pt-6 w-11/12 xl:container mx-auto">
         <nav className="navbar">
-          {/* Mobile Start */}
+          {/* Navbar Start - Mobile */}
           <div className="navbar-start">
             <div className="dropdown">
               <button
@@ -97,21 +104,20 @@ const Navbar = () => {
             </div>
             <Link to="/" className="flex items-center space-x-2">
               <img className="w-16 h-auto" src={logoImg} alt="FoodFuse Logo" />
-              {/* Hidden on mobile, visible on lg+ */}
               <span className="hidden lg:inline text-xl font-bold text-orange-600">
                 FoodFuse
               </span>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Navbar Center - Desktop */}
           <div className="navbar-center hidden lg:flex">
             <ul className="menu menu-horizontal px-1 gap-8 text-md font-semibold">
               {links}
             </ul>
           </div>
 
-          {/* Auth Controls */}
+          {/* Navbar End - Auth */}
           <div className="navbar-end gap-2">
             {user ? (
               <div className="flex items-center gap-4">
