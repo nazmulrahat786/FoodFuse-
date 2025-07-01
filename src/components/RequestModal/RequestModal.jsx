@@ -66,8 +66,8 @@ const RequestModal = ({ isOpen, onClose, food }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
-      <div className="relative bg-white rounded-xl shadow-lg w-[90%] sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[90vh] overflow-y-auto p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center  bg-opacity-50 backdrop-blur-sm">
+      <div className="relative bg-white rounded-xl shadow-2xl w-[90%] sm:w-[80%] md:w-[60%] lg:w-[50%] xl:w-[40%] max-h-[90vh] overflow-y-auto p-6">
         {/* Close button */}
         <button
           onClick={onClose}

@@ -40,8 +40,9 @@ const Navbar = () => {
   const links = (
     <>
       <NavLink to="/" className={navLinkClass}>Home</NavLink>
-      <NavLink to="/allFoods" className={navLinkClass}>All Foods</NavLink>
+     
       <NavLink to="/availableFoods" className={navLinkClass}>Available Foods</NavLink>
+       <NavLink to="/allFoods" className={navLinkClass}>All Foods</NavLink>
       {user && (
         <>
           <NavLink to="/addFood" className={navLinkClass}>Add Food</NavLink>
