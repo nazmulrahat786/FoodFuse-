@@ -6,7 +6,7 @@ FoodFuse is a responsive web application designed to connect individuals who wan
 ---
 
 ## 🌐 Live Link  
-🔗 [FoodFuse Live](https://food786-53dd9.web.app)
+🔗 [FoodFuse Live](https://food786-53dd9.web.app) 
 
 
 
@@ -94,5 +94,6 @@ http://localhost:5173
 ## Relevant Links
 
 - 📂 **GitHub Repository:** https://github.com/nazmulrahat786/FoodFuse-  
+
 
 
