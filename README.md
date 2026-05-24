@@ -9,7 +9,7 @@ FoodFuse is a responsive web application designed to connect individuals who wan
 🔗 [FoodFuse Live](https://food786-53dd9.web.app) 
   
   
-   
+    
   
 ---
 
