@@ -4,7 +4,7 @@
 FoodFuse is a responsive web application designed to connect individuals who want to share excess food with those in need. The platform allows users to donate food, request meals, and manage their listings efficiently through a secure and user-friendly interface.
  
 ---
-
+ 
 ## 🌐 Live Link   
 🔗 [FoodFuse Live](https://food786-53dd9.web.app) 
  
